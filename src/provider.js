@@ -52,7 +52,7 @@ export default class  {
       return new InstanceExample();
     });
 
-    this.core.instance('example/singleton', () => {
+    this.core.singleton('example/singleton', () => {
       // Register a singleton instance
       return new SingletonExample();
     });
