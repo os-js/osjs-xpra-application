@@ -21,7 +21,7 @@ This is the Example Service Provdider for OS.js v3
 In you startup procedure, simply import and register:
 
 ```
-import ExampleServiceProvider from '@osjs/example-provider'; // You want your package name here
+import {ExampleServiceProvider} from '@osjs/example-provider'; // You want your package name here
 
 // ...
 
