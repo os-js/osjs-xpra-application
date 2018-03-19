@@ -7,20 +7,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/osjs/osjs-example-provider.git"
+    "url": "git+https://github.com/os-js/osjs-example-provider.git"
   },
   "keywords": [
     "osjs"
   ],
   "dependencies": {
-    "@osjs/gui": "^3.0.0",
-    "@osjs/cli": "^3.0.0",
+    "@osjs/gui": "^3.0.0-alpha",
+    "@osjs/cli": "^3.0.0-alpha",
     "hyperapp": "^1.1.2"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/osjs/osjs-example-provider/issues"
+    "url": "https://github.com/os-js/osjs-example-provider/issues"
   },
-  "homepage": "https://github.com/osjs/osjs-example-provider#readme"
+  "homepage": "https://github.com/os-js/osjs-example-provider#readme"
 }
