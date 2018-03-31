@@ -1,0 +1,28 @@
+{
+  "name": "Xpra",
+  "category": "network",
+  "icon": "logo.png",
+  "title": {
+    "en_EN": "Xpra"
+  },
+  "description": {
+    "en_EN": "Xpra"
+  },
+  "files": [
+    "js/lib/bencode.js",
+    "js/lib/zlib.js",
+    "js/lib/lz4.js",
+    "js/lib/forge.js",
+    "js/lib/broadway/Decoder.js",
+    "js/lib/aurora/aurora.js",
+    "js/lib/aurora/aurora-xpra.js",
+    "js/Keycodes.js",
+    "js/Protocol.js",
+    "js/Window.js",
+    "js/Notifications.js",
+    "js/Utilities.js",
+    "js/MediaSourceUtil.js",
+    "js/Client.js",
+    "index.js"
+  ]
+}
