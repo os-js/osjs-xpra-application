@@ -29,12 +29,11 @@
  */
 
 const path = require('path');
-const manifest = require('./metadata.json');
-const {createWebpack, webpack} = require('@osjs/cli')
+const metadata = require('./metadata.json');
 
-module.exports = (options) => {
+module.exports = (options, {createWebpack}) => {
   const config = createWebpack(__dirname, {
-    outputPath: path.resolve(options.dist.packages, manifest.name),
+    outputPath: path.resolve(options.dist.packages, metadata.name),
     copy: [
       path.resolve(__dirname, 'logo.png'),
       {from: path.resolve(__dirname, 'xpra-html5/js'), to: 'js'}
