@@ -13,9 +13,6 @@
     "osjs"
   ],
   "dependencies": {
-    "@osjs/gui": "^3.0.0-alpha",
-    "@osjs/cli": "^3.0.0-alpha",
-    "hyperapp": "^1.1.2"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
   "license": "BSD-2-Clause",
