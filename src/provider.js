@@ -28,18 +28,15 @@
  * @licence Simplified BSD License
  */
 
+import {ServiceProvider} from '@osjs/common';
+
 class InstanceExample {}
 class SingletonExample {}
 
 /**
  * Example OS.js Service Provider
  */
-export default class  {
-
-  constructor(core) {
-    // This is a reference to the OS.js Core class instance
-    this.core = core;
-  }
+export default class ExampleServiceProvider extends ServiceProvider {
 
   // Called when OS.js requests to shut down
   destroy() {

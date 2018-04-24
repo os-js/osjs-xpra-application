@@ -13,6 +13,7 @@
     "osjs"
   ],
   "dependencies": {
+    "@osjs/common": "^3.0.0-alpha.2"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
   "license": "BSD-2-Clause",
