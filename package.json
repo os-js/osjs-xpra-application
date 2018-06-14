@@ -12,12 +12,14 @@
   "keywords": [
     "osjs"
   ],
-  "dependencies": {
-  },
+  "dependencies": {},
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
   "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/os-js/osjs-xpra-package/issues"
   },
-  "homepage": "https://github.com/os-js/osjs-xpra-package#readme"
+  "homepage": "https://github.com/os-js/osjs-xpra-package#readme",
+  "osjs": {
+    "type": "package"
+  }
 }
