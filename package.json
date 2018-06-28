@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/os-js/osjs-example-provider/issues"
   },
-  "homepage": "https://github.com/os-js/osjs-example-provider#readme"
+  "homepage": "https://github.com/os-js/osjs-example-provider#readme",
+  "osjs": {
+    "type": "provider"
+  }
 }
