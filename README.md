@@ -13,8 +13,6 @@
 
 This is the Example Service Provdider for OS.js v3
 
-**PLEASE NOTE THAT THIS IS AN ALPHA PRE-RELEASE AND SUBJECT TO CHANGE WITHOUT NOTICE**
-
 
 ## Usage
 
@@ -25,7 +23,7 @@ import {ExampleServiceProvider} from '@osjs/example-provider'; // You want your 
 
 // ...
 
-  osjs.register(ExampleServiceProvider)
+osjs.register(ExampleServiceProvider)
 
 // ...
 
