@@ -1,6 +1,6 @@
 {
   "name": "@osjs/example-provider",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "OS.js v3 Example Service Provider",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
