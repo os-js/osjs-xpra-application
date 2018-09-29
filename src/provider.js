@@ -28,8 +28,6 @@
  * @licence Simplified BSD License
  */
 
-import {ServiceProvider} from '@osjs/common';
-
 class InstanceExample {}
 class SingletonExample {}
 
@@ -38,25 +36,23 @@ class SingletonExample {}
  */
 export default class ExampleServiceProvider extends ServiceProvider {
 
-  // Called when OS.js requests to shut down
-  destroy() {
+  constructor(core, options = {}) {
+    this.core = core;
+    this.options = options;
   }
 
-  // Called when OS.js initializes
-  async init() {
-    this.core.instance('example/instance', () => {
-      // Register a instance factory
-      return new InstanceExample();
-    });
-
-    this.core.singleton('example/singleton', () => {
-      // Register a singleton instance
-      return new SingletonExample();
-    });
+  /* The list of registered services */
+  provides() {
+    return [];
   }
 
-  // Called when OS.js has initialized everything and running
-  start() {
-  }
+  /* Initialize your services */
+  async init() {}
+
+  /* Start your services */
+  start() {}
+
+  /* Clean up */
+  destroy() {}
 
 }

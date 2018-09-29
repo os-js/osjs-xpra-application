@@ -12,9 +12,7 @@
   "keywords": [
     "osjs"
   ],
-  "dependencies": {
-    "@osjs/common": "^3.0.0-alpha.3"
-  },
+  "dependencies": {},
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
   "license": "BSD-2-Clause",
   "bugs": {
