@@ -1,9 +1,14 @@
 {
-  "name": "@osjs/xpra-package",
+  "name": "@osjs/xpra-application",
   "version": "1.0.0",
-  "description": "OS.js v3 xpra Package",
+  "description": "OS.js v3 Xpra Application",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint index.js",
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "stylelint": "stylelint index.scss",
+    "prepublishOnly": "npm run eslint && npm run stylelint && rm ./dist/* && NODE_ENV=production npm run build"
   },
   "repository": {
     "type": "git",
@@ -13,6 +18,17 @@
     "osjs"
   ],
   "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.54",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.54",
+    "@babel/preset-env": "^7.0.0-beta.54",
+    "@babel/runtime": "^7.0.0-beta.54",
+    "babel-loader": "^8.0.0-beta.4",
+    "copy-webpack-plugin": "^4.5.2",
+    "eslint": "^5.1.0",
+    "webpack": "^4.16.2",
+    "webpack-cli": "^3.1.0"
+  },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
   "license": "BSD-2-Clause",
   "bugs": {

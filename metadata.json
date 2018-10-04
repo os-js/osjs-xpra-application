@@ -2,6 +2,7 @@
   "name": "Xpra",
   "category": "network",
   "icon": "logo.png",
+  "singleton": true,
   "title": {
     "en_EN": "Xpra"
   },
@@ -23,6 +24,6 @@
     "js/Utilities.js",
     "js/MediaSourceUtil.js",
     "js/Client.js",
-    "index.js"
+    "main.js"
   ]
 }

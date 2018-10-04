@@ -29,21 +29,35 @@
  */
 
 const path = require('path');
-const metadata = require('./metadata.json');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-module.exports = (options, {createWebpack}) => {
-  const config = createWebpack(__dirname, {
-    outputPath: path.resolve(options.dist.packages, metadata.name),
-    copy: [
+const mode = process.env.NODE_ENV || 'development';
+const minimize = mode === 'production';
+
+module.exports = {
+  mode,
+  devtool: 'source-map',
+  entry: [
+    path.resolve(__dirname, 'index.js'),
+  ],
+  optimization: {
+    minimize,
+  },
+  plugins: [
+    new CopyWebpackPlugin([
       path.resolve(__dirname, 'logo.png'),
       {from: path.resolve(__dirname, 'xpra-html5/js'), to: 'js'}
-    ],
-    entry: {
-      index: [
-        path.resolve(__dirname, 'index.js')
-      ]
-    }
-  });
-
-  return config;
-}
+    ]),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader'
+        }
+      }
+    ]
+  }
+};
