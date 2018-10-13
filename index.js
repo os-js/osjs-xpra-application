@@ -31,11 +31,17 @@
 import {h, app} from 'hyperapp';
 import {name as applicationName} from './metadata.json';
 import {createClient} from 'xpra-html5-client';
+import {Box, BoxContainer, ToggleField, TextField} from '@osjs/gui';
 
 const register = (core, args, options, metadata) => {
   let tray;
   let status = 'disconnected';
   let windows = [];
+
+  const defaultOptions = {
+    uri: 'ws://localhost:10000',
+    sound: false
+  };
 
   const withWindow = (id, cb) => {
     const found = windows.find(w => w.id === 'XpraWindow_' + id);
@@ -44,10 +50,48 @@ const register = (core, args, options, metadata) => {
     }
   };
 
+  const createConnectionDialog = (cb) => {
+    const view = ($content, dialogWindow, window) => {
+      window._app = app(defaultOptions, {
+        setState: ({key, value}) => state => ({[key]: value}),
+        getState: () => state => state,
+      }, (state, actions) => {
+        return window.createView([
+          h(Box, {grow: 1}, [
+            h(BoxContainer, {}, 'URI'),
+            h(TextField, {
+              value: state.uri,
+              oninput: (ev, value) => actions.setState({key: 'uri', value})
+            }),
+            h(BoxContainer, {}, 'Enable Sound (experimental) ?'),
+            h(ToggleField, {
+              checked: state.sound,
+              onchange: (ev, value) => actions.setState({key: 'sound', value})
+            })
+          ])
+        ]);
+      }, $content);
+    };
+
+    core.make('osjs/dialogs')
+      .create({
+        buttons: ['ok', 'cancel'],
+        window: {
+          title: 'Xpra Connection',
+          dimension: {width: 300, height: 240}
+        }
+      }, dialog => {
+        return dialog._app.getState();
+      }, (button, value) => {
+        if (button === 'ok') {
+          cb(value);
+        }
+      })
+      .render(view);
+  };
+
   const proc = core.make('osjs/application', {args, options, metadata});
-  const client = createClient({
-    sound: false
-  }, {
+  const client = createClient(defaultOptions, {
     worker: proc.resource('worker.js')
   });
 
@@ -61,9 +105,9 @@ const register = (core, args, options, metadata) => {
         position: ev,
         menu: [{
           label: c ? 'Disconnect' : 'Connect',
-          onclick: () => client[c ? 'disconnect' : 'connect']()
-        }, {
-          label: 'Edit connection'
+          onclick: () => c
+            ? client.disconnect()
+            : createConnectionDialog(options => client.connect(options))
         }, {
           label: 'Windows',
           menu: []
@@ -186,13 +230,35 @@ const register = (core, args, options, metadata) => {
 
   client.on('ws:status', s => (status = s));
 
+  client.on('ws:close', () => {
+    core.make('osjs/notification', {
+      title: 'Xpra',
+      message: 'Connection was closed',
+      icon: proc.resource('logo.png')
+    });
+  });
+
+  client.on('system:started', () => {
+    core.make('osjs/notification', {
+      title: 'Xpra',
+      message: 'Session running',
+      icon: proc.resource('logo.png')
+    });
+  });
+
+  client.on('notification:create', (id, options) => {
+    core.make('osjs/notification', {
+      title: options.summary,
+      message: options.body,
+      icon: options.icon
+    });
+  });
+
   proc.on('destroy', () => {
     if (tray) {
       tray.destroy();
     }
   });
-
-  client.connect();
 
   return proc;
 };
