@@ -1,41 +1,44 @@
 {
   "name": "@osjs/xpra-application",
   "version": "1.0.0",
-  "description": "OS.js v3 Xpra Application",
+  "description": "OS.js v3 Xpra Client Application",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "eslint": "eslint index.js",
+    "eslint": "eslint *.js",
     "build": "webpack",
     "watch": "webpack --watch",
-    "stylelint": "stylelint index.scss",
-    "prepublishOnly": "npm run eslint && npm run stylelint && rm ./dist/* && NODE_ENV=production npm run build"
+    "prepublishOnly": "npm run eslint && rm ./dist/* && npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/os-js/osjs-xpra-package.git"
+    "url": "git+https://github.com/os-js/osjs-xpra-application.git"
   },
   "keywords": [
     "osjs"
   ],
-  "dependencies": {},
-  "devDependencies": {
-    "@babel/core": "^7.0.0-beta.54",
-    "@babel/plugin-transform-runtime": "^7.0.0-beta.54",
-    "@babel/preset-env": "^7.0.0-beta.54",
-    "@babel/runtime": "^7.0.0-beta.54",
-    "babel-loader": "^8.0.0-beta.4",
-    "copy-webpack-plugin": "^4.5.2",
-    "eslint": "^5.1.0",
-    "webpack": "^4.16.2",
-    "webpack-cli": "^3.1.0"
+  "dependencies": {
+    "xpra-html5-client": "^1.0.2"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/os-js/osjs-xpra-package/issues"
+    "url": "https://github.com/os-js/osjs-xpra-application/issues"
   },
-  "homepage": "https://github.com/os-js/osjs-xpra-package#readme",
+  "homepage": "https://github.com/os-js/osjs-xpra-application#readme",
   "osjs": {
     "type": "package"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/runtime": "^7.1.2",
+    "babel-loader": "^8.0.4",
+    "copy-webpack-plugin": "^4.5.3",
+    "eslint": "^5.6.1",
+    "file-loader": "^2.0.0",
+    "hyperapp": "^1.2.9",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2"
   }
 }

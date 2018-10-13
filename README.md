@@ -9,26 +9,15 @@
 [![Donate](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=andersevenrud%40gmail%2ecom&lc=NO&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)
 [![Support](https://img.shields.io/badge/patreon-support-orange.svg)](https://www.patreon.com/user?u=2978551&ty=h&u=2978551)
 
-# OS.js v3 Xpra Package
+# OS.js v3 Xpra Application
 
 This is the Xpra Package for OS.js v3
 
-**This repository uses Git submodules**
+**This is in no way complete, see the [Xpra HTML5 client library](https://github.com/andersevenrud/xpra-html5-client) for more information**
 
-## Usage
+## Installation
 
-You'll need:
-
-* Xpra installed
-* Websockify (**with the python module**)
-* python-dbus, python-gobject
-
-At the moment you'll have to manually start a process, for example Firefox:
-
+```bash
+npm install --save @osjs/xpra-application
+npm run package:discover
 ```
-xpra --no-daemon --bind-tcp=127.0.0.1:10000 --start=firefox --html=on start :2
-```
-
-Then connect via the provided tray icon.
-
-**PLEASE NOTE THAT THIS IS AN ALPHA PRE-RELEASE AND SUBJECT TO CHANGE WITHOUT NOTICE**

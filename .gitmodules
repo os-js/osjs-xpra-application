@@ -1,4 +1,0 @@
-[submodule "xpra-html5"]
-	path = xpra-html5
-	url = git@github.com:andersevenrud/xpra-html5.git
-	branch = os-js

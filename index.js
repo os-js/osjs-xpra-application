@@ -1,4 +1,4 @@
-/*!
+/*
  * OS.js - JavaScript Cloud/Web Desktop Platform
  *
  * Copyright (c) 2011-2018, Anders Evenrud <andersevenrud@gmail.com>
@@ -27,219 +27,174 @@
  * @author  Anders Evenrud <andersevenrud@gmail.com>
  * @licence Simplified BSD License
  */
-import {
-  XpraClient,
-  createSurface,
-  createConnection,
-  readImage,
-  draw
-} from './client.js';
 
-/*
- * Parse given WebSocket connection URI
- */
-const parseConnectionUri = value => {
-  const a = document.createElement('a');
-  a.href = value;
-  const {hostname, port, protocol} = a;
-  return {hostname, port, ssl: protocol.match(/((http|ws)s:)$/)};
-};
+import {h, app} from 'hyperapp';
+import {name as applicationName} from './metadata.json';
+import {createClient} from 'xpra-html5-client';
 
-/*
- * Window factory
- */
-const createWindowFactory = (core, proc, client) => (props) => {
-  console.warn('Creating new Xpra Window', props);
+const register = (core, args, options, metadata) => {
+  let tray;
+  let status = 'disconnected';
+  let windows = [];
 
-  const win = proc.createWindow({
-    id: 'XpraWindow_' + props.wid,
-    icon: proc.resource(proc.metadata.icon),
-    title: props.metadata.title,
-    attributes: {
-      modal: props.metadata.modal === 1
-    },
-    state: {
-      maximized: props.metadata.maximized === 1,
-      minimized: props.metadata.minimized === 1,
-    },
-    dimension: {
-      width: props.w,
-      height: props.h
-    },
-    position: {
-      left: props.x,
-      top: props.y
+  const withWindow = (id, cb) => {
+    const found = windows.find(w => w.id === 'XpraWindow_' + id);
+    if (found) {
+      cb(found);
     }
-  });
+  };
 
-  const {surface, buffer, canvas, resize, move} = createSurface(client, win, props);
-  canvas.style.position = 'relative';
-  canvas.style.zIndex = 1;
-
-  win._surface = surface;
-
-  win.on('focus', () => client._window_set_focus(surface));
-  win.on('close', () => {
-    // FIXME
-    if (confirm('Close window in X session?')) {
-      client._window_closed(surface);
-    }
-  });
-  win.on('resized, maximize, restore', () => {
-    setTimeout(() => {
-      const {offsetWidth, offsetHeight} = win.$content;
-      resize(offsetWidth, offsetHeight, surface);
-    }, 1);
-  });
-  win.on('moved', () => move());
-  win.on('render', () => move());
-
-  win.render($content => {
-    //$content.style.overflow = 'visible';
-    $content.appendChild(canvas);
-    win.resizeFit(canvas);
-  });
-
-  return surface;
-};
-
-/*
- * Overlay factory
- */
-const createOverlayFactory = (core, proc, client) => (parent, props) => {
-  console.warn('Creating new Xpra Overlay', props);
-
-  const geom = parent._surface.get_internal_geometry();
-  const {surface, canvas} = createSurface(client, {}, props, true);
-  canvas.style.position = 'absolute';
-  canvas.style.top = String(props.y - geom.y) + 'px';
-  canvas.style.left = String(props.x - geom.x) + 'px';
-  canvas.style.zIndex = 10;
-  canvas.style.pointerEvents = 'none';
-
-  parent.$content.appendChild(canvas);
-
-  return surface;
-};
-
-/*
- * Notification factory
- */
-const createNotificationFactory = (core, proc) => message => {
-  core.make('osjs/notification', {
-    icon: proc.resource('/icon.png'),
-    title: 'Xpra',
-    message
-  });
-};
-
-/*
- * Connection dialog
- */
-const createConnectionDialog = (core, proc, client) => {
-  core.make('osjs/dialog', 'prompt', {
-    title: 'Xpra Connection Dialog',
-    message: 'Enter the server address for connection:',
-    value: 'ws://localhost:10000'
-  }, (btn, value) => {
-    if (btn === 'ok') {
-      const uri = parseConnectionUri(value);
-      const options = {
-        debug: true,
-        keyboard_layout: 'no',
-        ssl: uri.ssl,
-        host: uri.hostname,
-        port: uri.port,
-        username: '',
-        password: '',
-      };
-
-      console.warn(uri, options);
-
-      proc.args.lastConnection = options;
-
-      createConnection(client, options);
-    }
-  });
-};
-
-/*
- * Tray Menu
- */
-const createTrayMenuFactory = (core, proc, client) => () => ([
-  {
-    label: 'New connection',
-    onclick: () => createConnectionDialog(core, proc, client)
-  },
-  {
-    label: 'Windows', items: proc.windows.map(w => ({
-      label: w.state.title,
-      onclick: () => w.focus()
-    }))
-  },
-  {
-    label: 'Quit',
-    onclick: () =>  proc.destroy()
-  }
-]);
-
-/*
- * OS.js Application
- */
-OSjs.make('osjs/packages').register('Xpra', (core, args, options, metadata) => {
-  const tmp = document.createElement('div');
-  tmp.style.display = 'none';
-  core.$root.appendChild(tmp);
-
-  const bus = core.make('osjs/event-handler', 'XpraBus');
   const proc = core.make('osjs/application', {args, options, metadata});
-  const client = new XpraClient(proc, tmp, bus);
-  const notifications = createNotificationFactory(core, proc);
-  const window = createWindowFactory(core, proc, client);
-  const overlay = createOverlayFactory(core, proc, client);
-  const menu = createTrayMenuFactory(core, proc, client);
-
-  // Client events
-  bus.on('new-window', (props, cb) => {
-    if (props.override_redirect) {
-      const id = `XpraWindow_${props.metadata['override-redirect']}`
-      const found = proc.windows.find(w => w.id === id);
-      if (found) {
-        cb(overlay(found, props));
-      } else {
-        console.warn('Failed to find parent window', id);
-      }
-    } else {
-      cb(window(props));
-    }
-  });
-  bus.on('connect', () => notifications('Connecting...'));
-  bus.on('close', () => {
-    notifications('Disconnected.');
-    proc.removeWindow(() => true);
+  const client = createClient({
+    sound: false
+  }, {
+    worker: proc.resource('worker.js')
   });
 
-  // Tray icon
   if (core.has('osjs/tray')) {
-    const tray = core.make('osjs/tray').create({
-      icon: proc.resource(metadata.icon)
+    tray = core.make('osjs/tray').create({
+      icon: proc.resource('logo.png')
     }, (ev) => {
+      const c = status === 'connected';
+
       core.make('osjs/contextmenu').show({
         position: ev,
-        menu: menu()
+        menu: [{
+          label: c ? 'Disconnect' : 'Connect',
+          onclick: () => client[c ? 'disconnect' : 'connect']()
+        }, {
+          label: 'Edit connection'
+        }, {
+          label: 'Windows',
+          menu: []
+        }]
       });
     });
 
     proc.on('destroy', () => tray.destroy());
   }
 
-  // Cleanups
-  proc.on('destroy', () => tmp.remove());
+  client.on('window:create', w => {
+    console.warn(w);
 
-  // Restoration
-  if (proc.args.lastConnection) {
-    createConnection(client, proc.args.lastConnection);
-  }
+    const win = core.make('osjs/window', {
+      id: 'XpraWindow_' + w.wid,
+      title: w.metadata.title,
+      dimension: {
+        width: w.w,
+        height: w.h
+      },
+      position: {
+        top: w.y,
+        left: w.x
+      }
+    });
+
+    win.on('close', () => client.surface.kill(w.wid));
+    win.on('focus', () => client.surface.focus(w.wid));
+    win.on('keydown, keypress, keyup', ev => client.inject(ev));
+    win.on('render', () => {
+      win.setDimension({
+        width: w.w,
+        height: w.h + win.$header.offsetHeight
+      });
+    });
+
+    win.init();
+
+    win.render($content => {
+      win._metadata = w.metadata;
+      win._app = app({
+        overlays: []
+      }, {
+        addOverlay: overlay => state => {
+          return {overlays: [...state.overlays, overlay]};
+        },
+        removeOverlay: ({wid}) => state => {
+          const overlays = state.overlays;
+          const foundIndex = overlays.findIndex(o => o.wid === wid);
+          if (foundIndex !== -1) {
+            overlays.splice(foundIndex, 1);
+          }
+
+          return {overlays};
+        }
+      }, (state, actions) => {
+        return h('div', {
+          class: 'xpra--root',
+          onmousemove: ev => client.inject(ev),
+          onmousedown: ev => client.inject(ev),
+          onmouseup: ev => client.inject(ev),
+          style: {
+            position: 'relative'
+          }
+        }, [
+          h('div', {
+            position: 'absolute',
+            zIndex: 1,
+            oncreate: el => el.appendChild(w.canvas)
+          }),
+          ...state.overlays.map(s => h('div', {
+            key: s.wid,
+            class: 'xpra--surface',
+            style: {
+              position: 'absolute',
+              zIndex: 10,
+              top: `${s.y - w.y}px`,
+              left: `${s.x - w.x}px`
+            },
+            oncreate: el => el.appendChild(s.canvas)
+          }))
+        ]);
+      }, $content);
+    });
+
+    windows.push(win);
+  });
+
+  client.on('window:destroy', ({wid}) => {
+    const foundIndex = windows.findIndex(w => w.id === 'XpraWindow_' + wid);
+    if (foundIndex !== -1) {
+      windows[foundIndex].destroy();
+      windows.splice(foundIndex, 1);
+    }
+  });
+
+  client.on('window:icon', ({wid, src}) => {
+    withWindow(wid, win => win.setIcon(src));
+  });
+
+  client.on('window:metadata', ({wid, metadata}) => {
+    withWindow(wid, win => {
+      const newMetadata = Object.assign({}, win._metadata, metadata);
+      win.setTitle(newMetadata.title);
+    });
+  });
+
+  client.on('overlay:create', o => {
+    console.warn(o);
+    withWindow(o.parent.wid, win => {
+      win._app.addOverlay(o);
+    });
+  });
+
+  client.on('overlay:destroy', o => {
+    withWindow(o.parent.wid, win => {
+      win._app.removeOverlay(o);
+    });
+  });
+
+  client.on('ws:status', s => (status = s));
+
+  proc.on('destroy', () => {
+    if (tray) {
+      tray.destroy();
+    }
+  });
+
+  client.connect();
 
   return proc;
-});
+};
+
+OSjs.register(applicationName, register);
