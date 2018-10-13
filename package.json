@@ -16,6 +16,10 @@
   "keywords": [
     "osjs"
   ],
+  "files": [
+    "dist/",
+    "metadata.json"
+  ],
   "dependencies": {
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
