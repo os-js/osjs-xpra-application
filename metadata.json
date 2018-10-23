@@ -4,10 +4,12 @@
   "icon": "logo.png",
   "singleton": true,
   "title": {
-    "en_EN": "Xpra"
+    "en_EN": "Xpra",
+    "nb_NO": "Xpra"
   },
   "description": {
-    "en_EN": "Xpra"
+    "en_EN": "View remote desktop sessions via Xpra",
+    "nb_NO": "Se skrivebord via fjerntjeneste"
   },
   "files": [
     "main.js"
