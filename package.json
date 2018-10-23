@@ -20,8 +20,7 @@
     "dist/",
     "metadata.json"
   ],
-  "dependencies": {
-  },
+  "dependencies": {},
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
   "license": "BSD-2-Clause",
   "bugs": {
@@ -36,14 +35,14 @@
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/runtime": "^7.1.2",
+    "@osjs/gui": "^3.0.0-alpha.35",
     "babel-loader": "^8.0.4",
-    "copy-webpack-plugin": "^4.5.3",
+    "copy-webpack-plugin": "^4.5.4",
     "eslint": "^5.6.1",
     "file-loader": "^2.0.0",
     "hyperapp": "^1.2.9",
-    "webpack": "^4.20.2",
+    "webpack": "^4.22.0",
     "webpack-cli": "^3.1.2",
-    "@osjs/gui": "^3.0.0-alpha.35",
-    "xpra-html5-client": "^1.0.2"
+    "xpra-html5-client": "^1.0.3"
   }
 }
