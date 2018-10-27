@@ -1,6 +1,6 @@
 {
   "name": "@osjs/xpra-application",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "OS.js v3 Xpra Client Application",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
