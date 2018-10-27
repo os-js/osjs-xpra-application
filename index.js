@@ -31,7 +31,7 @@
 import {h, app} from 'hyperapp';
 import {name as applicationName} from './metadata.json';
 import {createClient} from 'xpra-html5-client';
-import {Box, BoxContainer, ToggleField, TextField} from '@osjs/gui/index.js';
+import {Box, BoxContainer, ToggleField, TextField} from '@osjs/gui';
 
 const register = (core, args, options, metadata) => {
   let tray;
