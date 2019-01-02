@@ -18,6 +18,6 @@ This is the Xpra Package for OS.js v3
 ## Installation
 
 ```bash
-npm install --save @osjs/xpra-application
+npm install --save --production @osjs/xpra-application
 npm run package:discover
 ```
