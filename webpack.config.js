@@ -19,6 +19,9 @@ module.exports = {
   optimization: {
     minimize,
   },
+  externals: {
+    osjs: 'OSjs'
+  },
   module: {
     rules: [
       {

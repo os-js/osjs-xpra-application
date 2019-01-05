@@ -28,6 +28,7 @@
  * @licence Simplified BSD License
  */
 
+import osjs from 'osjs';
 import {h, app} from 'hyperapp';
 import {name as applicationName} from './metadata.json';
 import {createClient} from 'xpra-html5-client';
@@ -263,4 +264,4 @@ const register = (core, args, options, metadata) => {
   return proc;
 };
 
-OSjs.register(applicationName, register);
+osjs.register(applicationName, register);
