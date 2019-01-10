@@ -5,11 +5,15 @@
   "singleton": true,
   "title": {
     "en_EN": "Xpra",
-    "nb_NO": "Xpra"
+    "nb_NO": "Xpra",
+    "fr_FR": "Xpra",
+    "de_DE": "Xpra"
   },
   "description": {
     "en_EN": "View remote desktop sessions via Xpra",
-    "nb_NO": "Se skrivebord via fjerntjeneste"
+    "nb_NO": "Se skrivebord via fjerntjeneste",
+    "fr_FR": "Affichage des sessions de bureau à distance via Xpra",
+    "de_DE": "Anzeigen von Remote-Desktop-Sitzungen über Xpra"
   },
   "files": [
     "main.js"
