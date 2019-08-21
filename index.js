@@ -76,7 +76,7 @@ const register = (core, args, options, metadata) => {
 
     core.make('osjs/dialogs')
       .create({
-        buttons: ['ok', 'cancel'],
+        buttons: ['cancel', 'ok'],
         window: {
           title: 'Xpra Connection',
           dimension: {width: 300, height: 240}
