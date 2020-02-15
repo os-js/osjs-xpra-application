@@ -7,13 +7,15 @@
     "en_EN": "Xpra",
     "nb_NO": "Xpra",
     "fr_FR": "Xpra",
-    "de_DE": "Xpra"
+    "de_DE": "Xpra",
+    "pt_BR": "Xpra"
   },
   "description": {
     "en_EN": "View remote desktop sessions via Xpra",
     "nb_NO": "Se skrivebord via fjerntjeneste",
     "fr_FR": "Affichage des sessions de bureau à distance via Xpra",
-    "de_DE": "Anzeigen von Remote-Desktop-Sitzungen über Xpra"
+    "de_DE": "Anzeigen von Remote-Desktop-Sitzungen über Xpra",
+    "pt_BR": "Veja sessões da área de trabalho remotamente via Xpra"
   },
   "files": [
     "main.js"
