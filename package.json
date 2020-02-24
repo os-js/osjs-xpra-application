@@ -30,12 +30,12 @@
     "type": "package"
   },
   "dependencies": {
-    "@osjs/gui": "^4.0.20",
+    "@osjs/gui": "^4.0.31",
     "hyperapp": "^1.2.9",
     "xpra-html5-client": "^1.0.3"
   },
   "devDependencies": {
-    "@osjs/dev-meta": "^1.0.1"
+    "@osjs/dev-meta": "^1.0.3"
   },
   "eslintConfig": {
     "env": {
