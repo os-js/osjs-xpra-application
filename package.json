@@ -1,7 +1,7 @@
 {
   "name": "@osjs/xpra-application",
-  "version": "1.0.8",
-  "description": "OS.js v3 Xpra Client Application",
+  "version": "1.0.9",
+  "description": "OS.js Xpra Client Application",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "eslint *.js",
