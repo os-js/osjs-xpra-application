@@ -85,6 +85,7 @@ const register = (core, args, options, metadata) => {
             h(BoxContainer, {}, 'Password'),
             h(TextField, {
               value: state.password,
+              type: 'password',
               oninput: (ev, value) => { 
                 actions.setState({key: 'password', value});
                 proc.settings.password = value;
