@@ -42,8 +42,8 @@ const register = (core, args, options, metadata) => {
   let defaultOptions = {
     uri: proc.settings.uri || 'ws://localhost:10000',
     sound: proc.settings.sound || false,
-    username: proc.settings.username || "username",
-    password: proc.settings.password || "password",
+    username: proc.settings.username || 'username',
+    password: proc.settings.password || 'password',
     passwords: [ proc.settings.password ],
     autologin: proc.settings.autologin || false,
     bandwidth_limit: 0
@@ -55,7 +55,7 @@ const register = (core, args, options, metadata) => {
       cb(found);
     }
   };
-  
+
   const createConnectionDialog = (cb) => {
     const view = ($content, dialogWindow, window) => {
       window._app = app(defaultOptions, {
@@ -86,7 +86,7 @@ const register = (core, args, options, metadata) => {
             h(TextField, {
               value: state.password,
               type: 'password',
-              oninput: (ev, value) => { 
+              oninput: (ev, value) => {
                 actions.setState({key: 'password', value});
                 proc.settings.password = value;
                 proc.saveSettings();
@@ -95,7 +95,7 @@ const register = (core, args, options, metadata) => {
             h(BoxContainer, {}, 'Enable Sound (experimental) ?'),
             h(ToggleField, {
               checked: state.sound,
-              onchange: (ev, value) => { 
+              onchange: (ev, value) => {
                 actions.setState({key: 'sound', value});
                 proc.settings.sound = value;
                 proc.saveSettings();
@@ -132,7 +132,7 @@ const register = (core, args, options, metadata) => {
       .render(view);
   };
 
-  
+
   const client = createClient(defaultOptions, {
     worker: proc.resource('worker.js')
   });
@@ -153,23 +153,23 @@ const register = (core, args, options, metadata) => {
         }, {
           label: 'Settings',
           onclick: () =>
-            createConnectionDialog(options => { 
+            createConnectionDialog(options => {
               proc.settings = options;
               proc.saveSettings();
               defaultOptions = options;
             })
-        },{
+        }, {
           label: 'Windows',
           menu: []
         }]
       });
     });
-    
-    if(proc.settings.autologin == true)  {
+
+    if(proc.settings.autologin === true)  {
       defaultOptions.reconnect = true;
       client.connect(defaultOptions);
     }
-    
+
     proc.on('destroy', () => tray.destroy());
   }
 
