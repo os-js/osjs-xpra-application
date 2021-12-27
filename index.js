@@ -38,10 +38,15 @@ const register = (core, args, options, metadata) => {
   let tray;
   let status = 'disconnected';
   let windows = [];
-
-  const defaultOptions = {
-    uri: 'ws://localhost:10000',
-    sound: false
+  const proc = core.make('osjs/application', {args, options, metadata});
+  let defaultOptions = {
+    uri: proc.settings.uri || 'ws://localhost:10000',
+    sound: proc.settings.sound || false,
+    username: proc.settings.username || "username",
+    password: proc.settings.password || "password",
+    passwords: [ proc.settings.password ],
+    autologin: proc.settings.autologin || false,
+    bandwidth_limit: 0
   };
 
   const withWindow = (id, cb) => {
@@ -50,7 +55,7 @@ const register = (core, args, options, metadata) => {
       cb(found);
     }
   };
-
+  
   const createConnectionDialog = (cb) => {
     const view = ($content, dialogWindow, window) => {
       window._app = app(defaultOptions, {
@@ -62,12 +67,47 @@ const register = (core, args, options, metadata) => {
             h(BoxContainer, {}, 'URI'),
             h(TextField, {
               value: state.uri,
-              oninput: (ev, value) => actions.setState({key: 'uri', value})
+              oninput: (ev, value) => {
+                actions.setState({key: 'uri', value});
+                proc.setting.uri = value;
+                proc.saveSettings();
+              }
+            }),
+            h(BoxContainer, {}, 'Username'),
+            h(TextField, {
+              value: state.username,
+              oninput: (ev, value) => {
+                actions.setState({key: 'username', value});
+                proc.settings.username = value;
+                proc.saveSettings();
+              }
+            }),
+            h(BoxContainer, {}, 'Password'),
+            h(TextField, {
+              value: state.password,
+              oninput: (ev, value) => { 
+                actions.setState({key: 'password', value});
+                proc.settings.password = value;
+                proc.saveSettings();
+              }
             }),
             h(BoxContainer, {}, 'Enable Sound (experimental) ?'),
             h(ToggleField, {
               checked: state.sound,
-              onchange: (ev, value) => actions.setState({key: 'sound', value})
+              onchange: (ev, value) => { 
+                actions.setState({key: 'sound', value});
+                proc.settings.sound = value;
+                proc.saveSettings();
+              }
+            }),
+            h(BoxContainer, {}, 'Enable Autologin'),
+            h(ToggleField, {
+              checked: state.autologin,
+              onchange: (ev, value) => {
+                actions.setState({key: 'autologin', value});
+                proc.settings.autologin = value;
+                proc.settingSave();
+              }
             })
           ])
         ]);
@@ -79,7 +119,7 @@ const register = (core, args, options, metadata) => {
         buttons: ['cancel', 'ok'],
         window: {
           title: 'Xpra Connection',
-          dimension: {width: 300, height: 240}
+          dimension: {width: 300, height: 420}
         }
       }, dialog => {
         return dialog._app.getState();
@@ -91,7 +131,7 @@ const register = (core, args, options, metadata) => {
       .render(view);
   };
 
-  const proc = core.make('osjs/application', {args, options, metadata});
+  
   const client = createClient(defaultOptions, {
     worker: proc.resource('worker.js')
   });
@@ -108,14 +148,27 @@ const register = (core, args, options, metadata) => {
           label: c ? 'Disconnect' : 'Connect',
           onclick: () => c
             ? client.disconnect()
-            : createConnectionDialog(options => client.connect(options))
+            : client.connect(defaultOptions)
         }, {
+          label: 'Settings',
+          onclick: () =>
+            createConnectionDialog(options => { 
+              proc.settings = options;
+              proc.saveSettings();
+              defaultOptions = options;
+            })
+        },{
           label: 'Windows',
           menu: []
         }]
       });
     });
-
+    
+    if(proc.settings.autologin == true)  {
+      defaultOptions.reconnect = true;
+      client.connect(defaultOptions);
+    }
+    
     proc.on('destroy', () => tray.destroy());
   }
 
