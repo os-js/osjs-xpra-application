@@ -39,7 +39,7 @@ const register = (core, args, options, metadata) => {
   let status = 'disconnected';
   let windows = [];
   const proc = core.make('osjs/application', {args, options, metadata});
-  let defaultOptions = {
+  const defaultOptions = {
     uri: proc.settings.uri || 'ws://localhost:10000',
     sound: proc.settings.sound || false,
     username: proc.settings.username || 'username',
@@ -156,7 +156,7 @@ const register = (core, args, options, metadata) => {
             createConnectionDialog(options => {
               proc.settings = options;
               proc.saveSettings();
-              defaultOptions = options;
+              Object.assign(defaultOptions, options);
             })
         }, {
           label: 'Windows',
